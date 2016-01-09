@@ -1,0 +1,54 @@
+{
+  "name": "stream-conversions",
+  "version": "0.0.0",
+  "description": "Convert between stream libraries",
+  "main": "lib/stream-conversions.js",
+  "scripts": {
+    "mocha": "mocha --compilers js:babel-core/register",
+    "test-browser": "testem",
+    "test-ci": "testem ci",
+    "test": "npm run mocha",
+    "prelib": "rm -rf lib/",
+    "lib": "rollup -c rollup.lib.js",
+    "predist": "rm -rf dist/",
+    "dist": "rollup -c rollup.dist.js",
+    "postdist": "uglifyjs dist/stream-conversions.js --output dist/stream-conversions.min.js",
+    "prepublish": "npm run lib && npm run dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylors/stream-conversions.git"
+  },
+  "keywords": [
+    "most",
+    "mostjs",
+    "rx",
+    "rxjs",
+    "stream",
+    "conversion"
+  ],
+  "author": "Tylor Steinberger <tlsteinberger167@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tylors/stream-conversions/issues"
+  },
+  "homepage": "https://github.com/tylors/stream-conversions#readme",
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "babel-core": "^6.4.0",
+    "babel-preset-es2015-rollup": "^1.0.0",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.2",
+    "mocha": "^2.3.4",
+    "rollup": "^0.24.1",
+    "rollup-plugin-babel": "^2.3.8",
+    "rollup-plugin-commonjs": "^2.1.0",
+    "rollup-plugin-npm": "^1.2.1",
+    "testem": "^0.9.11",
+    "uglify-js": "^2.6.1"
+  },
+  "dependencies": {
+    "most": "^0.17.0",
+    "rx": "^4.0.7"
+  }
+}
