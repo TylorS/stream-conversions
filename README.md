@@ -32,7 +32,7 @@ import Rx from 'rx'
 import Bacon from 'baconjs'
 import kefir from 'kefir'
 
-convert.most.to.rx(most.just(100)).observe(x => console.log(x)) // 100
+convert.most.to.rx(most.just(100)).subscribe(x => console.log(x)) // 100
 
 convert.rx.to.bacon(Rx.Observable.just(100)).onValue(x => console.log(x)) // 100
 
