@@ -39,7 +39,7 @@ convert.rx.to.bacon(Rx.Observable.just(100)).onValue(x => console.log(x)) // 100
 convert.bacon.to.most(Bacon.once(100)).observe(x => console.log(x)) // 100
 
 convert.kefir.to.kefir(Kefir.constant(100)).onValue(x => console.log(x)) // 100
-convert.keft.to.rx(Kefir.constant(100)).subscribe(x => console.log(x)) // 100
+convert.kefir.to.rx(Kefir.constant(100)).subscribe(x => console.log(x)) // 100
 
 ```
 
