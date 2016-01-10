@@ -1,4 +1,27 @@
-import * as most from './most'
-import * as rx from './rx'
+import interfaces from './interfaces'
+import is from './is'
+import to from './to'
 
-export {most, rx}
+const libraries = [
+  'most',
+  'rx',
+  'bacon',
+  'kefir',
+]
+
+const makeTo = fromLib =>
+  libraries.reduce(
+    (acc, toLib) => {
+      acc[toLib] = stream => {
+        is[fromLib](stream)
+        return to[toLib](stream, interfaces[fromLib])
+      }
+      return acc
+    }, {})
+
+const convert = libraries.reduce((acc, lib) => {
+  acc[lib] = {to: makeTo(lib)}
+  return acc
+}, {})
+
+export default convert

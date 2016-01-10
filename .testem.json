@@ -3,7 +3,7 @@
   "src_files": [
     "test/index.js"
   ],
-  "before_tests": "browserify test/index.js -t babelify -o test/bundle.js",
+  "before_tests": "npm run lib && browserify test/index.js -t babelify -o test/bundle.js",
   "serve_files": [
     "test/bundle.js"
   ],

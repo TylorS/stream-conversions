@@ -4,10 +4,10 @@
   "description": "Convert between stream libraries",
   "main": "lib/stream-conversions.js",
   "scripts": {
-    "mocha": "mocha --compilers js:babel-core/register",
+    "mocha": "mocha --compilers js:babel-core/register test",
     "test-browser": "testem",
     "test-ci": "testem ci",
-    "test": "npm run mocha",
+    "test": "npm run lib && npm run mocha",
     "prelib": "rm -rf lib/",
     "lib": "rollup -c rollup.lib.js",
     "predist": "rm -rf dist/",
@@ -48,6 +48,8 @@
     "uglify-js": "^2.6.1"
   },
   "dependencies": {
+    "baconjs": "^0.7.83",
+    "kefir": "^3.2.0",
     "most": "^0.17.0",
     "rx": "^4.0.7"
   }
