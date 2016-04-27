@@ -1,8 +1,10 @@
-var streamConversions = (function (most,rx,Bacon,Kefir) {
+var streamConversions = (function (Most,rx,Bacon,Kefir,Xstream) {
   'use strict';
 
+  Most = 'default' in Most ? Most['default'] : Most;
   Bacon = 'default' in Bacon ? Bacon['default'] : Bacon;
   Kefir = 'default' in Kefir ? Kefir['default'] : Kefir;
+  Xstream = 'default' in Xstream ? Xstream['default'] : Xstream;
 
   var mostInterface = function mostInterface(stream, observer) {
     stream.observe(function (x) {
@@ -48,11 +50,26 @@ var streamConversions = (function (most,rx,Bacon,Kefir) {
     });
   };
 
+  var xstreamInterface = function xstreamInterface(stream, observer) {
+    stream.addListener({
+      next: function next(x) {
+        return observer.onNext(x);
+      },
+      error: function error(x) {
+        return observer.onError(x);
+      },
+      complete: function complete(x) {
+        return observer.onCompleted(x);
+      }
+    });
+  };
+
   var interfaces = {
     most: mostInterface,
     rx: rxInterface,
     bacon: baconInterface,
-    kefir: kefirInterface
+    kefir: kefirInterface,
+    xstream: xstreamInterface
   };
 
   var message = function message(lib) {
@@ -83,15 +100,22 @@ var streamConversions = (function (most,rx,Bacon,Kefir) {
     }
   }
 
+  function isXstream(stream) {
+    if (typeof stream.addListener !== 'function') {
+      throw new Error(message('xstream'));
+    }
+  }
+
   var is = {
     most: isMost,
     rx: isRx,
     bacon: isBacon,
-    kefir: isKefir
+    kefir: isKefir,
+    xstream: isXstream
   };
 
   var toMost = function toMost(stream, streamInterface) {
-    return most.create(function (add, end, error) {
+    return Most.create(function (add, end, error) {
       var observer = {
         onNext: add,
         onCompleted: end,
@@ -141,14 +165,35 @@ var streamConversions = (function (most,rx,Bacon,Kefir) {
     });
   };
 
+  var toXstream = function toXstream(stream, streamInterface) {
+    return Xstream.create({
+      start: function start(listener) {
+        var observer = {
+          onNext: function onNext(x) {
+            return listener.next(x);
+          },
+          onError: function onError(x) {
+            return listener.error(x);
+          },
+          onCompleted: function onCompleted(x) {
+            return listener.complete(x);
+          }
+        };
+        streamInterface(stream, observer);
+      },
+      stop: function stop() {}
+    });
+  };
+
   var to = {
     most: toMost,
     rx: toRx,
     bacon: toBacon,
-    kefir: toKefir
+    kefir: toKefir,
+    xstream: toXstream
   };
 
-  var libraries = ['most', 'rx', 'bacon', 'kefir'];
+  var libraries = ['most', 'rx', 'bacon', 'kefir', 'xstream'];
 
   var makeTo = function makeTo(fromLib) {
     return libraries.reduce(function (acc, toLib) {
@@ -167,5 +212,5 @@ var streamConversions = (function (most,rx,Bacon,Kefir) {
 
   return convert;
 
-}(most,Rx,Bacon,Kefir));
+}(most,Rx,Bacon,Kefir,Xstream));
 //# sourceMappingURL=stream-conversions.js.map

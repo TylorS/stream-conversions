@@ -24,11 +24,18 @@ function isKefir(stream) {
   }
 }
 
+function isXstream(stream) {
+  if (typeof stream.addListener !== `function`) {
+    throw new Error(message('xstream'))
+  }
+}
+
 const is = {
   most: isMost,
   rx: isRx,
   bacon: isBacon,
   kefir: isKefir,
+  xstream: isXstream,
 }
 
 export default is

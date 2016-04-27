@@ -7,6 +7,7 @@ const libraries = [
   'rx',
   'bacon',
   'kefir',
+  'xstream',
 ]
 
 const makeTo = fromLib =>
