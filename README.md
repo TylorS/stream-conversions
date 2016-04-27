@@ -11,6 +11,7 @@ npm install stream-conversions
 - **Rx 4** - aliased as rx
 - **Bacon.js** - aliased as bacon
 - **Kefir.js** - aliased as kefir
+- **xstream** - aliased as xstream
 
 ## API
 
