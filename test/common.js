@@ -3,6 +3,7 @@ const most = require('most')
 const Rx = require('rx')
 const Bacon = require('baconjs')
 const Kefir = require('kefir')
+const Xstream = require('xstream').default
 
 const makeAssertions = done => n => {
   assert.strictEqual(n, 100)
@@ -16,6 +17,11 @@ const subscription = {
   most: (done, stream) => stream.observe(makeAssertions(done)),
   bacon: (done, stream) => stream.onValue(makeAssertions(done)),
   kefir: (done, stream) => stream.onValue(makeAssertions(done)),
+  xstream: (done, stream) => stream.addListener({
+    next: makeAssertions(done),
+    error: err => {},
+    complete: () => {},
+  }),
 }
 
 const makeObserve = (library, done) => stream => {
@@ -29,9 +35,10 @@ function beforeEachFn() {
   this.rx = Rx.Observable.just(100)
   this.bacon = Bacon.once(100)
   this.kefir = Kefir.constant(100)
+  this.xstream = Xstream.of(100)
 }
 
 // to add
-const libraries = ['most', 'rx', 'bacon', 'kefir']
+const libraries = ['most', 'rx', 'bacon', 'kefir', 'xstream']
 
 module.exports = {makeAssertions, beforeEachFn, libraries, makeObserve}

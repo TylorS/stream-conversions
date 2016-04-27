@@ -1,10 +1,11 @@
-import {create} from 'most'
+import Most from 'most'
 import {Observable} from 'rx'
 import Bacon from 'baconjs'
 import Kefir  from 'kefir'
+import Xstream from 'xstream'
 
 const toMost = (stream, streamInterface) =>
-  create((add, end, error) => {
+  Most.create((add, end, error) => {
     const observer = {
       onNext: add,
       onCompleted: end,
@@ -37,11 +38,26 @@ const toKefir = (stream, streamInterface) =>
     streamInterface(stream, observer)
   })
 
+const toXstream = (stream, streamInterface) =>
+    Xstream.create({
+        start: function (listener) {
+            const observer = {
+                onNext: x => listener.next(x),
+                onError: x => listener.error(x),
+                onCompleted: x => listener.complete(x),
+            }
+            streamInterface(stream, observer)
+        },
+        stop: function () {}
+    })
+
+
 const to = {
   most: toMost,
   rx: toRx,
   bacon: toBacon,
   kefir: toKefir,
+  xstream: toXstream,
 }
 
 export default to

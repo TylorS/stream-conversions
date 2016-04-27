@@ -25,11 +25,20 @@ const kefirInterface = (stream, observer) => {
   stream.onEnd(x => observer.onCompleted(x))
 }
 
+const xstreamInterface = (stream, observer) => {
+  stream.addListener({
+    next: x => observer.onNext(x),
+    error: x => observer.onError(x),
+    complete: x => observer.onCompleted(x),
+  })
+}
+
 const interfaces = {
   most: mostInterface,
   rx: rxInterface,
   bacon: baconInterface,
   kefir: kefirInterface,
+  xstream: xstreamInterface,
 }
 
 export default interfaces
